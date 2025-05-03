@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../App.css';
@@ -13,7 +13,7 @@ function Dashboard() {
 
   const token = localStorage.getItem('token');
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const res = await axios.get('http://localhost:5000/api/projects', {
         headers: { Authorization: `Bearer ${token}` }
@@ -24,7 +24,7 @@ function Dashboard() {
       console.error(err);
       setError('Failed to fetch projects');
     }
-  };
+  }, [token]);
 
   const handleCreate = async () => {
     try {
@@ -91,7 +91,7 @@ function Dashboard() {
     } else {
       fetchProjects();
     }
-  }, [token]);
+  }, [token, fetchProjects]);
 
   return (
     <div className="container">
