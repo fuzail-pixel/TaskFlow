@@ -26,6 +26,14 @@ function Dashboard() {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (!token) {
+      window.location.href = '/login';
+    } else {
+      fetchProjects();
+    }
+  }, [token, fetchProjects]);
+
   const handleCreate = async () => {
     try {
       setError('');
@@ -54,7 +62,7 @@ function Dashboard() {
     }
   };
 
-  const handleEditPrompt = project => {
+  const handleEditPrompt = (project) => {
     setEditProjectId(project._id);
     setEditProjectName(project.name);
   };
@@ -85,14 +93,6 @@ function Dashboard() {
     window.location.href = '/login';
   };
 
-  useEffect(() => {
-    if (!token) {
-      window.location.href = '/login';
-    } else {
-      fetchProjects();
-    }
-  }, [token, fetchProjects]);
-
   return (
     <div className="container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -103,10 +103,13 @@ function Dashboard() {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <ul>
-        {projects.map(p => (
+        {projects.map((p) => (
           <li key={p._id}>
             <span>
-              <Link to={`/projects/${p.name}/tasks`} style={{ marginRight: '10px', textDecoration: 'none', color: '#007bff', fontWeight: '500' }}>
+              <Link
+                to={`/projects/${p.name}/tasks`}
+                style={{ marginRight: '10px', textDecoration: 'none', color: '#007bff', fontWeight: '500' }}
+              >
                 {p.name}
               </Link>
             </span>
@@ -125,7 +128,7 @@ function Dashboard() {
               type="text"
               placeholder="New project name"
               value={newProjectName}
-              onChange={e => setNewProjectName(e.target.value)}
+              onChange={(e) => setNewProjectName(e.target.value)}
               required
             />
             <button className="create-btn" onClick={handleCreate}>Create Project</button>
@@ -142,7 +145,7 @@ function Dashboard() {
             <input
               type="text"
               value={editProjectName}
-              onChange={e => setEditProjectName(e.target.value)}
+              onChange={(e) => setEditProjectName(e.target.value)}
             />
             <button className="edit-btn" onClick={handleEditSave}>Save</button>
             <button className="cancel-btn" onClick={() => setEditProjectId(null)}>Cancel</button>

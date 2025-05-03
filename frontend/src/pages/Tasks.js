@@ -5,7 +5,7 @@ import '../App.css';
 
 function Tasks() {
   const { name } = useParams();
-  const projectName = name.trim();
+  const projectName = name?.trim(); // Safely handle possible undefined
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ title: '', description: '' });
   const [error, setError] = useState('');
@@ -92,7 +92,7 @@ function Tasks() {
     } else {
       fetchTasks();
     }
-  }, [token]);
+  }, [token, projectName]); // ✅ Now includes projectName as a dependency
 
   return (
     <div className="container">
