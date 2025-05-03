@@ -1,0 +1,207 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 28px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f0f2f5;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+}
+
+li span {
+  flex: 1;
+  margin-right: 10px;
+  word-break: break-word;
+}
+
+.project-actions,
+.task-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+input {
+  padding: 8px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+  min-width: 200px;
+}
+
+button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button.edit-btn {
+  background-color: #007bff;
+}
+button.edit-btn:hover {
+  background-color: #0056b3;
+}
+
+button.delete-btn {
+  background-color: #dc3545;
+}
+button.delete-btn:hover {
+  background-color: #a71d2a;
+}
+
+button.create-btn {
+  background-color: #28a745;
+}
+button.create-btn:hover {
+  background-color: #218838;
+}
+
+button.cancel-btn {
+  background-color: #6c757d;
+}
+button.cancel-btn:hover {
+  background-color: #5a6268;
+}
+
+button.logout-btn {
+  background-color: #343a40;
+  margin-left: auto;
+}
+button.logout-btn:hover {
+  background-color: #23272b;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.task-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-status {
+  margin: 0 10px;
+  font-style: italic;
+  color: #555;
+}
+
+p {
+  margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+  li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .project-actions,
+  .task-actions {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* Back/Generic Navigation Button */
+button.back-btn,
+button.primary-btn {
+  background-color: #17a2b8; /* teal-blue for good contrast */
+  color: #fff;
+  font-weight: 600;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.back-btn:hover,
+button.primary-btn:hover {
+  background-color: #117a8b;
+}
+/* Back Button */
+button.back-btn {
+  background-color: #6f42c1; /* Violet */
+  color: #fff;
+}
+button.back-btn:hover {
+  background-color: #5936a7;
+}
+
+/* In Progress Button */
+button.inprogress-btn {
+  background-color: #fd7e14; /* Orange */
+  color: #fff;
+}
+button.inprogress-btn:hover {
+  background-color: #e96a00;
+}
+
+/* Done Button */
+button.done-btn {
+  background-color: #20c997; /* Teal */
+  color: #fff;
+}
+button.done-btn:hover {
+  background-color: #179e78;
+}
+
+/* Project Page Buttons */
+button.project-edit-btn {
+  background-color: #17a2b8; /* Blue-ish */
+}
+button.project-edit-btn:hover {
+  background-color: #117a8b;
+}
+
+button.project-delete-btn {
+  background-color: #dc3545; /* Red */
+}
+button.project-delete-btn:hover {
+  background-color: #a71d2a;
+}
+
+
+
