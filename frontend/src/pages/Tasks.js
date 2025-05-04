@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import '../App.css';
 
 function Tasks() {
   const { name } = useParams();
-  const projectName = name?.trim(); // Safely handle possible undefined
+  const navigate = useNavigate();
+  const projectName = name?.trim();
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState({ title: '', description: '' });
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!token) navigate('/login');
+    else fetchTasks();
+  }, [token, projectName]);
 
   const fetchTasks = async () => {
     try {
@@ -25,30 +32,28 @@ function Tasks() {
   };
 
   const createTask = async () => {
+    setError('');
     if (!newTask.title.trim()) {
       return setError('Title is required');
     }
 
     try {
-      const projectRes = await axios.get('http://localhost:5000/api/projects', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      const projectMatch = projectRes.data.find(
-        p => p.name.trim() === projectName
-      );
-
-      if (!projectMatch) return setError('Project not found');
-
-      const res = await axios.post(
-        'http://localhost:5000/api/tasks',
-        { ...newTask, project: projectMatch._id },
+      const { data: projects } = await axios.get(
+        'http://localhost:5000/api/projects',
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setTasks([...tasks, res.data]);
+      const project = projects.find(p => p.name.trim() === projectName);
+      if (!project) return setError('Project not found');
+
+      const { data: createdTask } = await axios.post(
+        'http://localhost:5000/api/tasks',
+        { ...newTask, project: project._id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setTasks(prev => [...prev, createdTask]);
       setNewTask({ title: '', description: '' });
-      setError('');
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || 'Task creation failed');
@@ -57,15 +62,15 @@ function Tasks() {
 
   const updateTaskStatus = async (id, status) => {
     try {
-      const res = await axios.put(
+      const { data: updatedTask } = await axios.put(
         `http://localhost:5000/api/tasks/${id}`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setTasks(tasks.map(t => (t._id === id ? res.data : t)));
+      setTasks(prev => prev.map(t => (t._id === id ? updatedTask : t)));
     } catch (err) {
       console.error(err);
-      setError('Failed to update task');
+      setError('Failed to update task status');
     }
   };
 
@@ -74,7 +79,7 @@ function Tasks() {
       await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setTasks(tasks.filter(t => t._id !== id));
+      setTasks(prev => prev.filter(t => t._id !== id));
     } catch (err) {
       console.error(err);
       setError('Failed to delete task');
@@ -83,16 +88,8 @@ function Tasks() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    window.location.href = '/login';
+    navigate('/login');
   };
-
-  useEffect(() => {
-    if (!token) {
-      window.location.href = '/login';
-    } else {
-      fetchTasks();
-    }
-  }, [token, projectName]); // ✅ Now includes projectName as a dependency
 
   return (
     <div className="container">
@@ -101,7 +98,7 @@ function Tasks() {
         <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </div>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="error-text">{error}</p>}
 
       <ul className="task-list">
         {tasks.map(task => (
