@@ -16,7 +16,7 @@ function Tasks() {
   useEffect(() => {
     if (!token) navigate('/login');
     else fetchTasks();
-  }, [token, projectName]);
+  }, [fetchTasks, navigate]);
 
   const fetchTasks = async () => {
     try {
