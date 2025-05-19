@@ -12,12 +12,7 @@ function Tasks() {
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
 
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!token) navigate('/login');
-    else fetchTasks();
-  }, [fetchTasks, navigate]);
-
+  // ✅ Move fetchTasks ABOVE useEffect
   const fetchTasks = async () => {
     try {
       const res = await axios.get(
@@ -30,6 +25,12 @@ function Tasks() {
       setError('Failed to fetch tasks');
     }
   };
+
+  // ✅ Now fetchTasks is safe to use
+  useEffect(() => {
+    if (!token) navigate('/login');
+    else fetchTasks();
+  }, [navigate]); // 👈 Removed `fetchTasks` from deps to avoid warning
 
   const createTask = async () => {
     setError('');
